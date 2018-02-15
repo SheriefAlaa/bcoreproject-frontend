@@ -29,7 +29,7 @@
 <b-row v-for="(field, index) in currentRiskType.RiskTypeGenericType" :key="index">
     <template v-if="field.TypeAsText === 'enum'">
         <b-col sm="5"><b-input v-model="field.FieldTitle" placeholder="Field Title"></b-input></b-col>
-        <b-col sm="5" ><b-input placeholder="Enter comma seperated value" v-model="field.FieldValue" @change="commaSeperatedToEnum(field.FieldValue)"></b-input></b-col>
+        <b-col sm="5" ><b-input placeholder="Enter comma seperated value" v-model="field.FieldValue" @change="enumResultInit = false"></b-input></b-col>
         <b-col sm="1"><b-button size="sm" @click="deleteFieldFromRisk(currentRiskType, index)">X</b-button></b-col>
         <b-col sm="1"><b-button size="sm">Save</b-button></b-col>
     </template>
@@ -71,6 +71,7 @@ export default {
       showAddFieldTypeButton: false,
       showRiskTypeFields: false,
       showPreview: false,
+      enumResultInit: false,
       enumResult: [],
     };
   },
@@ -99,8 +100,10 @@ export default {
         if (typeof(value) === 'object'){
           this.enumResult = value
         }
-        else {
-        this.enumResult = value.split(',')
+
+        if(typeof(value) === 'string' && this.enumResultInit === false) {
+          this.enumResult = value.split(',')
+          this.enumResultInit = true
         }
       },
   },
